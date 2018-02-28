@@ -68,4 +68,8 @@ public class infoPerson {
     public String getFingerNumber() {
         return this.fingerNumber;
     }
+    
+    public String getSex() {
+        return this.sex;
+    }
 }
