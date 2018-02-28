@@ -21,6 +21,7 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
     private DeviceInfo          deviceInfo;
     private String              repoPath;
     private repositoryHandler   repoHandler;
+    private FingerData          scannedFingerData;
     /**
      * Creates new form FingerPrintScanner
      * @throws java.lang.Exception
@@ -65,6 +66,16 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         searchButton = new javax.swing.JButton();
         devStatusLabel = new javax.swing.JLabel();
         devStatusValLabel = new javax.swing.JLabel();
+        registrarPanel = new javax.swing.JPanel();
+        scannedImageLabel = new javax.swing.JLabel();
+        scanButton = new javax.swing.JButton();
+        backButton = new javax.swing.JButton();
+        searchPanel = new javax.swing.JPanel();
+        scannedImageLabel1 = new javax.swing.JLabel();
+        ansiFileButton = new javax.swing.JButton();
+        backSearchButton = new javax.swing.JButton();
+        scanButton2 = new javax.swing.JButton();
+        isoFileButton = new javax.swing.JButton();
         infoPersonPanel = new javax.swing.JPanel();
         nameLabel = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -78,16 +89,6 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         infoBackButton = new javax.swing.JButton();
         infoDoneButton = new javax.swing.JButton();
         sexInputCombo = new javax.swing.JComboBox<>();
-        registrarPanel = new javax.swing.JPanel();
-        scannedImageLabel = new javax.swing.JLabel();
-        scanButton = new javax.swing.JButton();
-        backButton = new javax.swing.JButton();
-        searchPanel = new javax.swing.JPanel();
-        scannedImageLabel1 = new javax.swing.JLabel();
-        ansiFileButton = new javax.swing.JButton();
-        backSearchButton = new javax.swing.JButton();
-        scanButton2 = new javax.swing.JButton();
-        isoFileButton = new javax.swing.JButton();
         appMenuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -121,62 +122,6 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
 
         devStatusValLabel.setText("Off");
         welcomePanel.add(devStatusValLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 260, -1, -1));
-
-        infoPersonPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        nameLabel.setText("Finger Number");
-        infoPersonPanel.add(nameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 110, -1));
-
-        jLabel2.setText("Name");
-        infoPersonPanel.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 70, -1));
-
-        jLabel3.setText("Age");
-        infoPersonPanel.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 70, -1));
-
-        jLabel4.setText("Sex");
-        infoPersonPanel.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 70, -1));
-
-        leftCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "LEFT Hand", "L_Thumb", "L_Index", "L_Middle", "L_Ring", "L_Pinky" }));
-        infoPersonPanel.add(leftCombo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, -1));
-
-        rightCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "RIGHT Hand", "R_Thumb", "R_Index", "R_Middle", "R_Ring", "R_Pinky", " " }));
-        infoPersonPanel.add(rightCombo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 170, -1, -1));
-
-        nameText.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nameTextActionPerformed(evt);
-            }
-        });
-        infoPersonPanel.add(nameText, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 20, 120, -1));
-
-        ageText.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ageTextActionPerformed(evt);
-            }
-        });
-        infoPersonPanel.add(ageText, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 60, 120, -1));
-        infoPersonPanel.add(fingerNumLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 240, 90, -1));
-
-        infoBackButton.setText("Back");
-        infoBackButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                infoBackButtonActionPerformed(evt);
-            }
-        });
-        infoPersonPanel.add(infoBackButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 230, -1, -1));
-
-        infoDoneButton.setText("Done");
-        infoDoneButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                infoDoneButtonActionPerformed(evt);
-            }
-        });
-        infoPersonPanel.add(infoDoneButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 230, -1, -1));
-
-        sexInputCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "M", "F", " " }));
-        infoPersonPanel.add(sexInputCombo, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 100, -1, -1));
-
-        welcomePanel.add(infoPersonPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 279));
 
         getContentPane().add(welcomePanel, "card2");
 
@@ -249,6 +194,62 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         searchPanel.add(isoFileButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 90, 110, -1));
 
         getContentPane().add(searchPanel, "card4");
+
+        infoPersonPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        nameLabel.setText("Finger Number");
+        infoPersonPanel.add(nameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 110, -1));
+
+        jLabel2.setText("Name");
+        infoPersonPanel.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 70, -1));
+
+        jLabel3.setText("Age");
+        infoPersonPanel.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 70, -1));
+
+        jLabel4.setText("Sex");
+        infoPersonPanel.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 70, -1));
+
+        leftCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "LEFT Hand", "L_Thumb", "L_Index", "L_Middle", "L_Ring", "L_Pinky" }));
+        infoPersonPanel.add(leftCombo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, -1));
+
+        rightCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "RIGHT Hand", "R_Thumb", "R_Index", "R_Middle", "R_Ring", "R_Pinky", " " }));
+        infoPersonPanel.add(rightCombo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 170, -1, -1));
+
+        nameText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nameTextActionPerformed(evt);
+            }
+        });
+        infoPersonPanel.add(nameText, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 20, 120, -1));
+
+        ageText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ageTextActionPerformed(evt);
+            }
+        });
+        infoPersonPanel.add(ageText, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 60, 120, -1));
+        infoPersonPanel.add(fingerNumLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 240, 90, -1));
+
+        infoBackButton.setText("Back");
+        infoBackButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                infoBackButtonActionPerformed(evt);
+            }
+        });
+        infoPersonPanel.add(infoBackButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 230, -1, -1));
+
+        infoDoneButton.setText("Done");
+        infoDoneButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                infoDoneButtonActionPerformed(evt);
+            }
+        });
+        infoPersonPanel.add(infoDoneButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 230, -1, -1));
+
+        sexInputCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "M", "F", " " }));
+        infoPersonPanel.add(sexInputCombo, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 100, -1, -1));
+
+        getContentPane().add(infoPersonPanel, "card5");
 
         fileMenu.setText("File");
 
@@ -328,7 +329,7 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
             return;
         }
         
-        fData = new FingerData();
+        scannedFingerData = new FingerData();
         
         //fRetValue = scannerDevice.StartCapture(fQuality, fTimeOut, fShowPreview);
         
@@ -340,15 +341,16 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         //Try for 4 time for best Quality and Nfiq  
         //The best Quality > 65 and Nfiq 1,2,3.
         
-        fRetValue = scannerDevice.AutoCapture(fData, fQuality, fTimeOut, fShowPreview);
+        fRetValue = scannerDevice.AutoCapture(scannedFingerData, fQuality, fTimeOut, fShowPreview);
         
         if(fRetValue == 0) {
             
-            System.out.println("The Quality Level : " + String.valueOf(fData.Quality()));
-            System.out.println("The Nfig    Level : " + String.valueOf(fData.Nfiq()));
+            System.out.println("The Quality Level : " + String.valueOf(scannedFingerData.Quality()));
+            System.out.println("The Nfig    Level : " + String.valueOf(scannedFingerData.Nfiq()));
             
             //Data in Acceptable range.
             //deviceEventHandler.storeData(fData);
+            //scannedFingerData = fData.clone();
             
         }else {
              JOptionPane.showMessageDialog(rootPane, "Error:  " + scannerDevice.GetLastError() + " (" + String.valueOf(fRetValue) + ")");
@@ -358,9 +360,7 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         //Show Register Panel.    
         registrarPanel.setVisible(false);
         infoPersonPanel.setVisible(true);
-        welcomePanel.setVisible(false);
-
-
+        //welcomePanel.setVisible(false);
     }//GEN-LAST:event_scanButtonActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
@@ -456,7 +456,14 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         
         registrarPanel.setVisible(true);
         infoPersonPanel.setVisible(false);
-        welcomePanel.setVisible(false);
+        //welcomePanel.setVisible(false);
+        
+        if(repoHandler.repoStoreContent(scannedFingerData, pInfo) == 0) {
+            JOptionPane.showMessageDialog(rootPane, "Data stored successully. ");
+        }else {
+            JOptionPane.showMessageDialog(rootPane, "Error :: Issue in Storage ... ");
+        }
+        
         
     }//GEN-LAST:event_infoDoneButtonActionPerformed
 
