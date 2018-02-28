@@ -57,4 +57,15 @@ public class infoPerson {
         this.sex = sex;
     }
     
+    public String getName() {
+        return this.name;
+    }
+    
+    public int getAge() {
+        return this.age;
+    }
+    
+    public String getFingerNumber() {
+        return this.fingerNumber;
+    }
 }
