@@ -1,0 +1,10 @@
+{
+   "Name": "xxxxx",
+   "Age": "NNN",
+   "Sex": "x",
+   "FingerNumber" : "X_XXXXX"
+   "ScanQuality": {
+       "Quality": NN,
+       "NTIS FIQ": N
+   }
+}

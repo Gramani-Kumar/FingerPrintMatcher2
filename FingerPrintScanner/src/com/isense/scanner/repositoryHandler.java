@@ -80,7 +80,4 @@ public class repositoryHandler {
         return new infoPerson();
     } 
     
-    
-    
-    
 }
