@@ -7,8 +7,13 @@ package com.isense.scanner;
 
 import java.io.File;
 import MFS100.FingerData;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.math.BigDecimal;
+import java.io.IOException;
+import java.time.temporal.TemporalAdjuster;
+import java.util.ArrayList;
+import java.util.Arrays;
 import javax.json.*;
 
 /**
@@ -19,6 +24,54 @@ public class repositoryHandler {
 
     
     private String repoPath; 
+    private ArrayList templateList = new ArrayList(); 
+    
+    private void addTemplates(String dirPath, File[] fList) throws FileNotFoundException, IOException{
+
+        for(File file : fList ){
+            if(file.isDirectory()) {
+                addTemplates(file.getAbsolutePath(), file.listFiles());
+            }
+            
+            boolean recFound = false;
+            repoData rd = new repoData();
+            
+            if(file.getName().equals("ISOTemplate.iso")){
+                FileInputStream fis = new FileInputStream(file);
+                fis.read(rd.getIsoTemplate());
+                fis.close();
+                System.out.println("The ISO Tempalted added ");
+                recFound = true;
+            }
+            if(file.getName().equals("AnsiTemplate.ansi")){
+                FileInputStream fis = new FileInputStream(file);
+                fis.read(rd.getAnsiTemplate());
+                fis.close();
+                System.out.println("The Ansi Tempalted added ");
+                recFound = true;
+            }
+            
+            if(recFound) {
+                rd.fileLocation(dirPath);
+                System.out.println("The AbsolutePath " + dirPath);
+
+                //Update.
+                templateList.add(rd);
+            }
+        }
+    }
+    
+    private void scanRepoForTemplates() {
+        
+        //Scan RepoPath.
+        File fList[] = new File(repoPath).listFiles();
+        
+        try {
+            addTemplates(repoPath, fList);
+        }catch(Exception e){
+            System.out.println("Exception: on ScanRepoForTemplates");
+        }
+    }
     
     private void dumpToFile(String fileName, byte[] data){
 
@@ -100,11 +153,32 @@ public class repositoryHandler {
         dumpToFile(repoPath + File.separator + dirName + File.separator + "RawData.raw", fInfo.RawData());
         dumpToFile(repoPath + File.separator + dirName + File.separator + "WSQImage.wsq", fInfo.WSQImage());
         
+        //Add to List
+        repoData rd = new repoData();
+        
+        rd.fileLocation(repoPath+ File.separator + dirName);
+        rd.storeAnsiTemplate(fInfo.ANSITemplate());
+        rd.storeIsoTemplate(fInfo.ISOTemplate());
+        
+        templateList.add(rd);
+        
         return 0;
     }
     
     public void setRepoPath(String path) {
         repoPath = path;
+        
+        scanRepoForTemplates();
+        //TODO: Span thread to populate to list 
+        //Runnable runnable = new Runnable() {
+        
+        //public void run() {
+            
+        //}
+        //};
+        
+        //Thread populate = new Thread(runnable);
+        //populate.start();
     }
 
     
@@ -112,5 +186,43 @@ public class repositoryHandler {
         
         return new infoPerson();
     } 
+    
+}
+
+ class repoData {
+
+    private byte [] isoTemplate;
+    private byte [] ansiTemplate;
+    
+    private String fileLocation;
+    
+    public repoData() {
+        //TODO intialialize
+        isoTemplate = new byte[512];
+        ansiTemplate = new byte[512];
+        fileLocation = "";
+    }
+    
+    public void storeIsoTemplate(byte [] isoTemplate){
+       this.isoTemplate = Arrays.copyOf(isoTemplate, isoTemplate.length);
+    }
+    
+    public void storeAnsiTemplate(byte [] ansiTemplate){
+       this.ansiTemplate = Arrays.copyOf(ansiTemplate, ansiTemplate.length);
+    }
+
+    public byte[] getIsoTemplate(){
+        
+         return isoTemplate;
+    }
+    
+    public byte [] getAnsiTemplate() {
+        
+        return ansiTemplate;
+    }
+    
+    public void fileLocation(String location) {
+        fileLocation = location;
+    }
     
 }

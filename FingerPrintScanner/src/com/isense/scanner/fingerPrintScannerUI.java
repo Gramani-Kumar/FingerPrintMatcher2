@@ -49,19 +49,22 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         //Scanner Device Instance.
         scannerDevice = new MFS100(deviceEventHandler, "");
 
+        //Repository 
+        repoHandler   = new repositoryHandler();
+
         //Configuration
         try {
             appConfigHandler = new configHandler();
             repoPath = appConfigHandler.getConfigRepoLocation();
             
+            if(!repoPath.isEmpty()){
+                repoHandler.setRepoPath(repoPath);
+            }
+            
         }catch (FileNotFoundException e) {
             //Ignore.
             System.out.println("Exception in Create ConfigHandler");
         }
-        
-        //Repository 
-        repoHandler   = new repositoryHandler();
-
     }
 
     /**
