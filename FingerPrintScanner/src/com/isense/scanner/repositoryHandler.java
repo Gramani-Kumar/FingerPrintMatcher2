@@ -26,6 +26,7 @@ public class repositoryHandler {
             FileOutputStream fout = new FileOutputStream(fileName);
             fout.write(data);
             fout.close();
+            
         }catch(Exception e) {
             //TODO exception on write.
             System.out.println("Exception in storing files " + e.getMessage());

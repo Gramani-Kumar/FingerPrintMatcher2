@@ -12,6 +12,8 @@ import MFS100.*;
  */
 public class mfsDeviceHandler implements MFS100Event  {
     
+    private repositoryHandler repo;
+    
     @Override
     public void OnPreview(final FingerData fingerData) {
         System.out.println("OnPrivew Quality  : " + String.valueOf(fingerData.Nfiq()));
@@ -28,6 +30,8 @@ public class mfsDeviceHandler implements MFS100Event  {
     }
     
     mfsDeviceHandler() {
+        
+        repo = new repositoryHandler();
         
     }
     

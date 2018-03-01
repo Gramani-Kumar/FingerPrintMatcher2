@@ -7,6 +7,7 @@ package com.isense.scanner;
 
 import MFS100.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -22,6 +23,7 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
     private String              repoPath;
     private repositoryHandler   repoHandler;
     private FingerData          scannedFingerData;
+    private configHandler       appConfigHandler;
     /**
      * Creates new form FingerPrintScanner
      * @throws java.lang.Exception
@@ -46,6 +48,16 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         
         //Scanner Device Instance.
         scannerDevice = new MFS100(deviceEventHandler, "");
+
+        //Configuration
+        try {
+            appConfigHandler = new configHandler();
+            repoPath = appConfigHandler.getConfigRepoLocation();
+            
+        }catch (FileNotFoundException e) {
+            //Ignore.
+            System.out.println("Exception in Create ConfigHandler");
+        }
         
         //Repository 
         repoHandler   = new repositoryHandler();
@@ -91,10 +103,11 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         sexInputCombo = new javax.swing.JComboBox<>();
         appMenuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        fMenuExit = new javax.swing.JMenuItem();
         settingMenu = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        sMenuSetRepo = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
+        hMenuAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.CardLayout());
@@ -253,28 +266,33 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
 
         fileMenu.setText("File");
 
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        fMenuExit.setText("Exit");
+        fMenuExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                fMenuExitActionPerformed(evt);
             }
         });
-        fileMenu.add(jMenuItem1);
+        fileMenu.add(fMenuExit);
 
         appMenuBar.add(fileMenu);
 
         settingMenu.setText("Settings");
 
-        jMenuItem2.setText("SetRepository");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        sMenuSetRepo.setText("SetRepository");
+        sMenuSetRepo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                sMenuSetRepoActionPerformed(evt);
             }
         });
-        settingMenu.add(jMenuItem2);
+        settingMenu.add(sMenuSetRepo);
 
         appMenuBar.add(settingMenu);
 
         helpMenu.setText("Help");
+
+        hMenuAbout.setText("About");
+        helpMenu.add(hMenuAbout);
+
         appMenuBar.add(helpMenu);
 
         setJMenuBar(appMenuBar);
@@ -282,9 +300,10 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void fMenuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fMenuExitActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+    }//GEN-LAST:event_fMenuExitActionPerformed
 
     private void regButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regButtonActionPerformed
 
@@ -398,7 +417,7 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_isoFileButtonActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void sMenuSetRepoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuSetRepoActionPerformed
         // TODO add your handling code here:
         
         if(!repoPath.isEmpty()) {
@@ -418,13 +437,19 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
             
             //set Path
             repoHandler.setRepoPath(repoPath);
-            
+            try {
+                appConfigHandler.updateRepoLocationConfig(repoPath);
+            }catch(Exception e){
+                //Ignore.
+                System.out.println("Exception : updateConfig " + e.getMessage() );
+            }
+
             JOptionPane.showMessageDialog(rootPane, "Repo Configured to : " + repoPath);
         }
         else {
             //Not Set !
         }
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_sMenuSetRepoActionPerformed
 
     private void nameTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameTextActionPerformed
         // TODO add your handling code here:
@@ -531,8 +556,10 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
     private javax.swing.JButton backSearchButton;
     private javax.swing.JLabel devStatusLabel;
     private javax.swing.JLabel devStatusValLabel;
+    private javax.swing.JMenuItem fMenuExit;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JLabel fingerNumLabel;
+    private javax.swing.JMenuItem hMenuAbout;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JButton infoBackButton;
     private javax.swing.JButton infoDoneButton;
@@ -541,14 +568,13 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JComboBox<String> leftCombo;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JTextField nameText;
     private javax.swing.JButton regButton;
     private javax.swing.JPanel registrarPanel;
     private javax.swing.JComboBox<String> rightCombo;
+    private javax.swing.JMenuItem sMenuSetRepo;
     private javax.swing.JButton scanButton;
     private javax.swing.JButton scanButton2;
     private javax.swing.JLabel scannedImageLabel;
