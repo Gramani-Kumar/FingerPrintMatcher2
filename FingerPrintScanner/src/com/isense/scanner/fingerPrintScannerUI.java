@@ -113,6 +113,7 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         hMenuAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("FingerPrint Scanner App 1.0");
         getContentPane().setLayout(new java.awt.CardLayout());
 
         welcomePanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -123,7 +124,7 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
                 regButtonActionPerformed(evt);
             }
         });
-        welcomePanel.add(regButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 90, 100, -1));
+        welcomePanel.add(regButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 100, 100, -1));
 
         searchButton.setText("Search");
         searchButton.addActionListener(new java.awt.event.ActionListener() {
@@ -131,13 +132,13 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
                 searchButtonActionPerformed(evt);
             }
         });
-        welcomePanel.add(searchButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 140, 100, -1));
+        welcomePanel.add(searchButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, 100, -1));
 
         devStatusLabel.setText("Device Status :");
-        welcomePanel.add(devStatusLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 260, -1, -1));
+        welcomePanel.add(devStatusLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, -1, -1));
 
         devStatusValLabel.setText("Off");
-        welcomePanel.add(devStatusValLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 260, -1, -1));
+        welcomePanel.add(devStatusValLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 270, -1, -1));
 
         getContentPane().add(welcomePanel, "card2");
 
@@ -156,7 +157,7 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
                 scanButtonActionPerformed(evt);
             }
         });
-        registrarPanel.add(scanButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 70, -1, -1));
+        registrarPanel.add(scanButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 70, 110, -1));
 
         backButton.setText("Back");
         backButton.addActionListener(new java.awt.event.ActionListener() {
@@ -199,7 +200,7 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
                 scanButton2ActionPerformed(evt);
             }
         });
-        searchPanel.add(scanButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 40, -1, -1));
+        searchPanel.add(scanButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 40, 110, -1));
 
         isoFileButton.setText("ISO-FILE");
         isoFileButton.addActionListener(new java.awt.event.ActionListener() {
@@ -214,7 +215,7 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         infoPersonPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         nameLabel.setText("Finger Number");
-        infoPersonPanel.add(nameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 110, -1));
+        infoPersonPanel.add(nameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, 110, -1));
 
         jLabel2.setText("Name");
         infoPersonPanel.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 70, -1));
@@ -226,6 +227,11 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         infoPersonPanel.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 70, -1));
 
         leftCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "LEFT Hand", "L_Thumb", "L_Index", "L_Middle", "L_Ring", "L_Pinky" }));
+        leftCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                leftComboActionPerformed(evt);
+            }
+        });
         infoPersonPanel.add(leftCombo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, -1));
 
         rightCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "RIGHT Hand", "R_Thumb", "R_Index", "R_Middle", "R_Ring", "R_Pinky", " " }));
@@ -305,7 +311,8 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
 
     private void fMenuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fMenuExitActionPerformed
         // TODO add your handling code here:
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        System.out.println("The Exit done..");
+        System.exit(0);
     }//GEN-LAST:event_fMenuExitActionPerformed
 
     private void regButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regButtonActionPerformed
@@ -351,28 +358,38 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
             return;
         }
         
-        scannedFingerData = new FingerData();
-        
-        //fRetValue = scannerDevice.StartCapture(fQuality, fTimeOut, fShowPreview);
-        
-        //if(fRetValue == 0) {
-        //    System.out.println("Scanning started successfully ");
-        //}
-        
         //TODO:
         //Try for 4 time for best Quality and Nfiq  
         //The best Quality > 65 and Nfiq 1,2,3.
-        
-        fRetValue = scannerDevice.AutoCapture(scannedFingerData, fQuality, fTimeOut, fShowPreview);
+
+        int max_iteration = 4;
+        int expectScore   = 70;
+        int timeout       = 1500;
+        do {
+
+            scannedFingerData = new FingerData();
+
+            fRetValue = scannerDevice.AutoCapture(scannedFingerData, expectScore, timeout, fShowPreview);
+
+            if(scannedFingerData.Quality() > expectScore){
+                JOptionPane.showMessageDialog(rootPane, "Thanks.. Scan got good score");
+                break;
+            } 
+            else {
+                JOptionPane.showMessageDialog(rootPane, "Try-again after cleaning the scanner surface !!");
+            }
+            max_iteration --;
+            expectScore -= 5;
+            timeout += 150;
+            
+            //TODO: NFiq.
+
+        }while(max_iteration > 0);
         
         if(fRetValue == 0) {
             
             System.out.println("The Quality Level : " + String.valueOf(scannedFingerData.Quality()));
             System.out.println("The Nfig    Level : " + String.valueOf(scannedFingerData.Nfiq()));
-            
-            //Data in Acceptable range.
-            //deviceEventHandler.storeData(fData);
-            //scannedFingerData = fData.clone();
             
         }else {
              JOptionPane.showMessageDialog(rootPane, "Error:  " + scannerDevice.GetLastError() + " (" + String.valueOf(fRetValue) + ")");
@@ -467,10 +484,14 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         infoPerson pInfo = new infoPerson();
         
         //TODO Validate Input.
-        
-        pInfo.setAge(Integer.valueOf(ageText.getText()));
-        pInfo.setName(nameText.getText());
-        pInfo.setSex(sexInputCombo.getSelectedItem().toString());
+        try {
+            pInfo.setAge(Integer.valueOf(ageText.getText()));
+            pInfo.setName(nameText.getText());
+            pInfo.setSex(sexInputCombo.getSelectedItem().toString());
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(rootPane, "One of Input value not correct !");
+            return;
+        }
         
         if(leftCombo.getSelectedIndex() > 0)
         {
@@ -501,6 +522,11 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         infoPersonPanel.setVisible(false);
         welcomePanel.setVisible(false);
     }//GEN-LAST:event_infoBackButtonActionPerformed
+
+    private void leftComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leftComboActionPerformed
+        // TODO add your handling code here:
+        nameLabel.setText("Finger Selected");//leftCombo.getItemAt(0));
+    }//GEN-LAST:event_leftComboActionPerformed
 
     /**
      * @param args the command line arguments

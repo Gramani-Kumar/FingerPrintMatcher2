@@ -7,6 +7,7 @@ package com.isense.scanner;
 
 import java.io.File;
 import MFS100.FingerData;
+import MFS100.MFS100;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -187,6 +188,59 @@ public class repositoryHandler {
         return new infoPerson();
     } 
     
+    
+
+    private infoPerson getInfoPerson(String fileLocation) {
+
+        infoPerson iPerson = null; 
+        
+        try {
+            FileInputStream fis = new FileInputStream(fileLocation + File.separator + "appConf.json");
+            // Get the JsonObject structure from JsonReader.
+
+            JsonReader reader = Json.createReader(fis);
+            // Get the JsonObject structure from JsonReader.
+            JsonObject confObj = reader.readObject();
+            iPerson = new infoPerson();
+            iPerson.setName(confObj.getString("Name"));
+            iPerson.setAge(Integer.getInteger(confObj.getString("Age")));
+            iPerson.setSex(confObj.getString("Sex"));
+
+            fis.close();
+            return iPerson;
+        }
+        catch(Exception e) {
+            
+        }
+        return iPerson;
+    }
+    
+    public infoPerson checkIsoTemplate(MFS100 devLib, byte[] isoTemplate){
+        
+        repoData rd;
+
+        for(int i = 0; i < templateList.size(); i ++) {
+            rd = (repoData) templateList.get(i);
+            int score = devLib.MatchISO(isoTemplate, rd.getAnsiTemplate());
+            if(score > 14000){
+              return getInfoPerson(rd.getFileLocation());
+            }
+        }
+        return null;
+    }
+    
+    public infoPerson checkAnsiTemplate(MFS100 devLib, byte[] ansiTemplate){
+        repoData rd;
+
+        for(int i = 0; i < templateList.size(); i ++) {
+            rd = (repoData) templateList.get(i);
+            int score = devLib.MatchISO(ansiTemplate, rd.getAnsiTemplate());
+            if(score > 14000){
+              return getInfoPerson(rd.getFileLocation());
+            }
+        }
+        return null;
+    }
 }
 
  class repoData {
@@ -223,6 +277,10 @@ public class repositoryHandler {
     
     public void fileLocation(String location) {
         fileLocation = location;
+    }
+    
+    public String getFileLocation() {
+        return fileLocation;
     }
     
 }

@@ -60,7 +60,8 @@ public class configHandler {
             //Already avaialble.
             FileInputStream fis = new FileInputStream(path + File.separator + "appConf.json");
             // Get the JsonObject structure from JsonReader.
-            try (JsonReader reader = Json.createReader(fis)) {
+            try {
+                JsonReader reader = Json.createReader(fis);
                 // Get the JsonObject structure from JsonReader.
                 confObj = reader.readObject();
                 repoLocation = confObj.getString("RepoPath");
