@@ -33,25 +33,24 @@ public class repositoryHandler {
                 addTemplates(file.getAbsolutePath(), file.listFiles());
             }
             
-            boolean recFound = false;
-            repoData rd = new repoData();
+            repoData rd = null;
             
             if(file.getName().equals("ISOTemplate.iso")){
+                rd = new repoData();
                 FileInputStream fis = new FileInputStream(file);
                 fis.read(rd.getIsoTemplate());
                 fis.close();
                 System.out.println("The ISO Tempalted added ");
-                recFound = true;
             }
             if(file.getName().equals("AnsiTemplate.ansi")){
+                rd = new repoData();
                 FileInputStream fis = new FileInputStream(file);
                 fis.read(rd.getAnsiTemplate());
                 fis.close();
                 System.out.println("The Ansi Tempalted added ");
-                recFound = true;
             }
             
-            if(recFound) {
+            if(rd != null) {
                 rd.fileLocation(dirPath);
                 System.out.println("The AbsolutePath " + dirPath);
 

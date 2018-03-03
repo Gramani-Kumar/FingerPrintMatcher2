@@ -443,7 +443,7 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
             expectScore -= 2;
             timeout += 100;
             
-            //TODO: NFiq.
+            //TODO: NFiq ??.
 
         }while(max_iteration > 0);
         
@@ -456,7 +456,6 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         //Show Register Panel.    
         registrarPanel.setVisible(false);
         infoPersonPanel.setVisible(true);
-        //welcomePanel.setVisible(false);
     }//GEN-LAST:event_scanButtonActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
@@ -494,10 +493,6 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         int timeOut = 2500;
         
         fRetValue = scannerDevice.AutoCapture(fingerData, expectScore, timeOut, false);
-
-//        System.out.println("TimeOut " + String.valueOf(timeout));
-//        System.out.println("Expecting Score " + String.valueOf(expectScore));
-//        System.out.println("Current Iteration index " + String.valueOf(max_iteration));
 
         System.out.println("The Quality Level : " + String.valueOf(fingerData.Quality()));
         System.out.println("The Nfig    Level : " + String.valueOf(fingerData.Nfiq()));
@@ -625,17 +620,15 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
             fingerNumLabel.setText(rightCombo.getSelectedItem().toString());
         }
         
-        registrarPanel.setVisible(true);
-        infoPersonPanel.setVisible(false);
-        //welcomePanel.setVisible(false);
-        
         if(repoHandler.repoStoreContent(scannedFingerData, pInfo) == 0) {
             JOptionPane.showMessageDialog(rootPane, "Data stored successully. ");
         }else {
             JOptionPane.showMessageDialog(rootPane, "Error :: Issue in Storage ... ");
         }
         
-        
+        registrarPanel.setVisible(true);
+        infoPersonPanel.setVisible(false);
+
     }//GEN-LAST:event_infoDoneButtonActionPerformed
 
     private void infoBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_infoBackButtonActionPerformed
