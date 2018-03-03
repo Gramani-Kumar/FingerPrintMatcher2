@@ -48,6 +48,9 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         
         //Scanner Device Instance.
         scannerDevice = new MFS100(deviceEventHandler, "");
+        
+        //Initialize device
+        scannerDevice.Init();
 
         //Repository 
         repoHandler   = new repositoryHandler();
@@ -104,6 +107,16 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         infoBackButton = new javax.swing.JButton();
         infoDoneButton = new javax.swing.JButton();
         sexInputCombo = new javax.swing.JComboBox<>();
+        persionInfoOutputPanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        infoOutOkButton = new javax.swing.JButton();
+        infoOutName = new javax.swing.JLabel();
+        infoOutSex = new javax.swing.JLabel();
+        infoOutAge = new javax.swing.JLabel();
+        infoOutFingerName = new javax.swing.JLabel();
         appMenuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         fMenuExit = new javax.swing.JMenuItem();
@@ -179,6 +192,7 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         searchPanel.add(scannedImageLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, 100, 120));
 
         ansiFileButton.setText("ANSI-FILE");
+        ansiFileButton.setEnabled(false);
         ansiFileButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ansiFileButtonActionPerformed(evt);
@@ -203,6 +217,7 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         searchPanel.add(scanButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 40, 110, -1));
 
         isoFileButton.setText("ISO-FILE");
+        isoFileButton.setEnabled(false);
         isoFileButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 isoFileButtonActionPerformed(evt);
@@ -273,6 +288,34 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
 
         getContentPane().add(infoPersonPanel, "card5");
 
+        persionInfoOutputPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setText("Name :");
+        persionInfoOutputPanel.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, -1, -1));
+
+        jLabel5.setText("Age    :");
+        persionInfoOutputPanel.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, -1, -1));
+
+        jLabel6.setText("Sex    :");
+        persionInfoOutputPanel.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 130, -1, -1));
+
+        jLabel7.setText("Finger :");
+        persionInfoOutputPanel.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 170, -1, -1));
+
+        infoOutOkButton.setText("OK");
+        infoOutOkButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                infoOutOkButtonActionPerformed(evt);
+            }
+        });
+        persionInfoOutputPanel.add(infoOutOkButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 250, -1, -1));
+        persionInfoOutputPanel.add(infoOutName, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 50, 200, -1));
+        persionInfoOutputPanel.add(infoOutSex, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 130, -1, -1));
+        persionInfoOutputPanel.add(infoOutAge, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 90, -1, -1));
+        persionInfoOutputPanel.add(infoOutFingerName, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 170, 230, -1));
+
+        getContentPane().add(persionInfoOutputPanel, "card6");
+
         fileMenu.setText("File");
 
         fMenuExit.setText("Exit");
@@ -321,26 +364,36 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Please set the Repository through settings");
             return;
         }
-
-        //scannerDevice.
-        int retValue  = scannerDevice.Init();
         
-        if(retValue == 0) {
-            
-            deviceInfo = scannerDevice.GetDeviceInfo();
-            
-            //TODO: Intialized but no Udev setup done.
+        deviceInfo = scannerDevice.GetDeviceInfo();
 
-            devStatusValLabel.setText("On");
-            welcomePanel.setVisible(false);
+        //TODO: Intialized but no Udev setup done.
 
-            //Show Register Panel.    
-            registrarPanel.setVisible(true);
-        }
-        else {
-            //Device Initiliazation failed.
-            JOptionPane.showMessageDialog(rootPane, "Error:  " + scannerDevice.GetLastError() + " (" + String.valueOf(retValue) + ")");
-        }
+        devStatusValLabel.setText("On");
+        welcomePanel.setVisible(false);
+
+        //Show Register Panel.    
+        registrarPanel.setVisible(true);
+
+//        //scannerDevice.
+//        int retValue  = scannerDevice.Init();
+//        
+//        if(retValue == 0) {
+//            
+//            deviceInfo = scannerDevice.GetDeviceInfo();
+//            
+//            //TODO: Intialized but no Udev setup done.
+//
+//            devStatusValLabel.setText("On");
+//            welcomePanel.setVisible(false);
+//
+//            //Show Register Panel.    
+//            registrarPanel.setVisible(true);
+//        }
+//        else {
+//            //Device Initiliazation failed.
+//            JOptionPane.showMessageDialog(rootPane, "Error:  " + scannerDevice.GetLastError() + " (" + String.valueOf(retValue) + ")");
+//        }
     }//GEN-LAST:event_regButtonActionPerformed
 
     private void scanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanButtonActionPerformed
@@ -363,36 +416,40 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         //The best Quality > 65 and Nfiq 1,2,3.
 
         int max_iteration = 4;
-        int expectScore   = 70;
-        int timeout       = 1500;
+        int expectScore   = 65;
+        int timeout       = 2500;
         do {
 
             scannedFingerData = new FingerData();
 
             fRetValue = scannerDevice.AutoCapture(scannedFingerData, expectScore, timeout, fShowPreview);
 
+            System.out.println("TimeOut " + String.valueOf(timeout));
+            System.out.println("Expecting Score " + String.valueOf(expectScore));
+            System.out.println("Current Iteration index " + String.valueOf(max_iteration));
+            
+            System.out.println("The Quality Level : " + String.valueOf(scannedFingerData.Quality()));
+            System.out.println("The Nfig    Level : " + String.valueOf(scannedFingerData.Nfiq()));
+            
             if(scannedFingerData.Quality() > expectScore){
                 JOptionPane.showMessageDialog(rootPane, "Thanks.. Scan got good score");
                 break;
             } 
             else {
-                JOptionPane.showMessageDialog(rootPane, "Try-again after cleaning the scanner surface !!");
+                JOptionPane.showMessageDialog(rootPane, "Try-again: after cleaning the scanner surface !!");
+                System.out.println("Devie error :" + scannerDevice.GetLastError());
             }
             max_iteration --;
-            expectScore -= 5;
-            timeout += 150;
+            expectScore -= 2;
+            timeout += 100;
             
             //TODO: NFiq.
 
         }while(max_iteration > 0);
         
-        if(fRetValue == 0) {
-            
-            System.out.println("The Quality Level : " + String.valueOf(scannedFingerData.Quality()));
-            System.out.println("The Nfig    Level : " + String.valueOf(scannedFingerData.Nfiq()));
-            
-        }else {
-             JOptionPane.showMessageDialog(rootPane, "Error:  " + scannerDevice.GetLastError() + " (" + String.valueOf(fRetValue) + ")");
+        if(fRetValue != 0) {
+             JOptionPane.showMessageDialog(rootPane, "Scanning Process Failed");
+             System.out.println("Devie error :" + scannerDevice.GetLastError());
              return;
         }
         
@@ -430,9 +487,74 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
     }//GEN-LAST:event_backSearchButtonActionPerformed
 
     private void scanButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanButton2ActionPerformed
-        // TODO add your handling code here:
+            
+        FingerData fingerData = new FingerData();
+        int fRetValue  = 0;
+        int expectScore = 60;
+        int timeOut = 2500;
+        
+        fRetValue = scannerDevice.AutoCapture(fingerData, expectScore, timeOut, false);
+
+//        System.out.println("TimeOut " + String.valueOf(timeout));
+//        System.out.println("Expecting Score " + String.valueOf(expectScore));
+//        System.out.println("Current Iteration index " + String.valueOf(max_iteration));
+
+        System.out.println("The Quality Level : " + String.valueOf(fingerData.Quality()));
+        System.out.println("The Nfig    Level : " + String.valueOf(fingerData.Nfiq()));
+
+        if(fRetValue != 0) {
+            JOptionPane.showMessageDialog(rootPane, "Scanning Error : " + scannerDevice.GetLastError());
+            return;
+        }
+        
+        infoPerson iPerson = null; 
+        iPerson = repoHandler.checkAnsiTemplate(scannerDevice, fingerData.ANSITemplate());
+        
+        if(iPerson != null) {
+            System.out.println("The Person name :" + iPerson.getName());
+        }else {
+            System.out.println("No Record found ");
+            JOptionPane.showMessageDialog(rootPane, "No Record Found !");
+            return;
+        }
+
+        System.out.println("Name  : " + iPerson.getName() + "" + iPerson.getFingerNumber() +" " + iPerson.getSex());
+        
+        //Display userInfo;
+        displayUserInfo(iPerson);
+        
     }//GEN-LAST:event_scanButton2ActionPerformed
 
+    private void displayUserInfo(infoPerson iPerson) {
+        
+        System.out.println("iPerson Object " + iPerson );
+        System.out.println("Name  : " + iPerson.getName() + "" + iPerson.getFingerNumber() +" " + iPerson.getSex());
+        
+        infoOutName.setText(iPerson.getName());
+        infoOutAge.setText(Integer.toString(iPerson.getAge()));
+        if(iPerson.getSex().equals("M"))
+            infoOutSex.setText("Male");
+        else
+            infoOutSex.setText("Female");
+        
+        String tOrgFig = iPerson.getFingerNumber();
+        String figName = "";
+        
+        if(tOrgFig.charAt(0) == 'L') {
+            figName = "LEFT Hand ";
+        }else{
+            figName = "Right Hand ";
+        }
+        
+        figName += tOrgFig.substring(2) +" Finger";
+        
+        infoOutFingerName.setText(figName);
+        
+        persionInfoOutputPanel.setVisible(true);
+        searchPanel.setVisible(false);
+        
+    }
+    
     private void isoFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isoFileButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_isoFileButtonActionPerformed
@@ -528,6 +650,12 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         nameLabel.setText("Finger Selected");//leftCombo.getItemAt(0));
     }//GEN-LAST:event_leftComboActionPerformed
 
+    private void infoOutOkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_infoOutOkButtonActionPerformed
+
+        persionInfoOutputPanel.setVisible(Boolean.FALSE);
+        searchPanel.setVisible(Boolean.TRUE);
+    }//GEN-LAST:event_infoOutOkButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -592,14 +720,24 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
     private javax.swing.JMenu helpMenu;
     private javax.swing.JButton infoBackButton;
     private javax.swing.JButton infoDoneButton;
+    private javax.swing.JLabel infoOutAge;
+    private javax.swing.JLabel infoOutFingerName;
+    private javax.swing.JLabel infoOutName;
+    private javax.swing.JButton infoOutOkButton;
+    private javax.swing.JLabel infoOutSex;
     private javax.swing.JPanel infoPersonPanel;
     private javax.swing.JButton isoFileButton;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JComboBox<String> leftCombo;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JTextField nameText;
+    private javax.swing.JPanel persionInfoOutputPanel;
     private javax.swing.JButton regButton;
     private javax.swing.JPanel registrarPanel;
     private javax.swing.JComboBox<String> rightCombo;

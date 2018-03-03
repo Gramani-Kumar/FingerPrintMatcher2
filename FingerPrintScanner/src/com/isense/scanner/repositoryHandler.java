@@ -12,7 +12,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.temporal.TemporalAdjuster;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.json.*;
@@ -25,7 +24,7 @@ public class repositoryHandler {
 
     
     private String repoPath; 
-    private ArrayList templateList = new ArrayList(); 
+    private final ArrayList templateList = new ArrayList(); 
     
     private void addTemplates(String dirPath, File[] fList) throws FileNotFoundException, IOException{
 
@@ -147,12 +146,12 @@ public class repositoryHandler {
                         pInfo, fInfo.Quality(), fInfo.Nfiq());
 
         //TODO ::Span thread to dump data to files.
-        dumpToFile(repoPath + File.separator + dirName + File.separator + "FingerImage.bmp", fInfo.FingerImage());
+        //dumpToFile(repoPath + File.separator + dirName + File.separator + "FingerImage.bmp", fInfo.FingerImage());
         dumpToFile(repoPath + File.separator + dirName + File.separator + "ISOTemplate.iso", fInfo.ISOTemplate());
-        dumpToFile(repoPath + File.separator + dirName + File.separator + "ISOImage.iso", fInfo.ISOImage());
+        //dumpToFile(repoPath + File.separator + dirName + File.separator + "ISOImage.iso", fInfo.ISOImage());
         dumpToFile(repoPath + File.separator + dirName + File.separator + "AnsiTemplate.ansi", fInfo.ANSITemplate());
-        dumpToFile(repoPath + File.separator + dirName + File.separator + "RawData.raw", fInfo.RawData());
-        dumpToFile(repoPath + File.separator + dirName + File.separator + "WSQImage.wsq", fInfo.WSQImage());
+        //dumpToFile(repoPath + File.separator + dirName + File.separator + "RawData.raw", fInfo.RawData());
+        //dumpToFile(repoPath + File.separator + dirName + File.separator + "WSQImage.wsq", fInfo.WSQImage());
         
         //Add to List
         repoData rd = new repoData();
@@ -182,20 +181,13 @@ public class repositoryHandler {
         //populate.start();
     }
 
-    
-    public infoPerson getContent(FingerData fInfo) {
-        
-        return new infoPerson();
-    } 
-    
-    
 
     private infoPerson getInfoPerson(String fileLocation) {
 
         infoPerson iPerson = null; 
         
         try {
-            FileInputStream fis = new FileInputStream(fileLocation + File.separator + "appConf.json");
+            FileInputStream fis = new FileInputStream(fileLocation + File.separator + "data.json");
             // Get the JsonObject structure from JsonReader.
 
             JsonReader reader = Json.createReader(fis);
@@ -203,8 +195,10 @@ public class repositoryHandler {
             JsonObject confObj = reader.readObject();
             iPerson = new infoPerson();
             iPerson.setName(confObj.getString("Name"));
-            iPerson.setAge(Integer.getInteger(confObj.getString("Age")));
+            iPerson.setAge(confObj.getInt("Age"));
             iPerson.setSex(confObj.getString("Sex"));
+            iPerson.setFingerNumber(confObj.getString("FingerName"));
+            //System.out.println("Name  : " + iPerson.getName() + "" + iPerson.getFingerNumber() +" " + iPerson.getSex());
 
             fis.close();
             return iPerson;
@@ -221,7 +215,7 @@ public class repositoryHandler {
 
         for(int i = 0; i < templateList.size(); i ++) {
             rd = (repoData) templateList.get(i);
-            int score = devLib.MatchISO(isoTemplate, rd.getAnsiTemplate());
+            int score = devLib.MatchISO(isoTemplate, rd.getIsoTemplate());
             if(score > 14000){
               return getInfoPerson(rd.getFileLocation());
             }
@@ -234,8 +228,9 @@ public class repositoryHandler {
 
         for(int i = 0; i < templateList.size(); i ++) {
             rd = (repoData) templateList.get(i);
-            int score = devLib.MatchISO(ansiTemplate, rd.getAnsiTemplate());
-            if(score > 14000){
+            int score = devLib.MatchANSI(ansiTemplate, rd.getAnsiTemplate());
+            System.out.println("Match Score :" + String.valueOf(i) + ":: " + String.valueOf(score));
+             if(score > 14000){
               return getInfoPerson(rd.getFileLocation());
             }
         }
