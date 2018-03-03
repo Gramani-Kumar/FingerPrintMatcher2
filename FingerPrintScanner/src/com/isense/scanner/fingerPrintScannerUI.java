@@ -407,6 +407,7 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         if(scannerDevice.IsConnected()) {
             System.out.println("The Device is connected");
         }else {
+            JOptionPane.showMessageDialog(rootPane, "Device Not Connected");
             System.out.println("The Device is NOT connected");
             return;
         }
@@ -491,6 +492,14 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         int fRetValue  = 0;
         int expectScore = 60;
         int timeOut = 2500;
+        
+        if(scannerDevice.IsConnected()) {
+            System.out.println("The Device is connected");
+        }else {
+            JOptionPane.showMessageDialog(rootPane, "Device Not Connected");
+            System.out.println("The Device is NOT connected");
+            return;
+        }
         
         fRetValue = scannerDevice.AutoCapture(fingerData, expectScore, timeOut, false);
 
