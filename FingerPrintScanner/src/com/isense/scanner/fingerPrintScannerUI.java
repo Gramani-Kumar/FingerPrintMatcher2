@@ -49,9 +49,6 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         //Scanner Device Instance.
         scannerDevice = new MFS100(deviceEventHandler, "");
         
-        //Initialize device
-        scannerDevice.Init();
-
         //Repository 
         repoHandler   = new repositoryHandler();
 
@@ -369,31 +366,23 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
 
         //TODO: Intialized but no Udev setup done.
 
+        int retValue = 0;
+        //Initialize device
+        retValue = scannerDevice.Init();
+        if(retValue == 0) {
+            System.out.println("Device initialized successfully ");
+        }else {
+            JOptionPane.showMessageDialog(rootPane, scannerDevice.GetLastError());
+            System.out.println("Device initialization error " + scannerDevice.GetLastError() + "RetValue " + retValue);
+            return;
+        }
+        
         devStatusValLabel.setText("On");
         welcomePanel.setVisible(false);
 
         //Show Register Panel.    
         registrarPanel.setVisible(true);
-
-//        //scannerDevice.
-//        int retValue  = scannerDevice.Init();
-//        
-//        if(retValue == 0) {
-//            
-//            deviceInfo = scannerDevice.GetDeviceInfo();
-//            
-//            //TODO: Intialized but no Udev setup done.
-//
-//            devStatusValLabel.setText("On");
-//            welcomePanel.setVisible(false);
-//
-//            //Show Register Panel.    
-//            registrarPanel.setVisible(true);
-//        }
-//        else {
-//            //Device Initiliazation failed.
-//            JOptionPane.showMessageDialog(rootPane, "Error:  " + scannerDevice.GetLastError() + " (" + String.valueOf(retValue) + ")");
-//        }
+    
     }//GEN-LAST:event_regButtonActionPerformed
 
     private void scanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanButtonActionPerformed
@@ -427,7 +416,7 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
 
             System.out.println("TimeOut " + String.valueOf(timeout));
             System.out.println("Expecting Score " + String.valueOf(expectScore));
-            System.out.println("Current Iteration index " + String.valueOf(max_iteration));
+            System.out.println("Attempt Number: " + String.valueOf(5 - max_iteration));
             
             System.out.println("The Quality Level : " + String.valueOf(scannedFingerData.Quality()));
             System.out.println("The Nfig    Level : " + String.valueOf(scannedFingerData.Nfiq()));
@@ -437,6 +426,7 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
                 break;
             } 
             else {
+                //if
                 JOptionPane.showMessageDialog(rootPane, "Try-again: after cleaning the scanner surface !!");
                 System.out.println("Devie error :" + scannerDevice.GetLastError());
             }
@@ -472,6 +462,18 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Please set the Repository through settings");
             return;
         }
+        
+        int retValue = 0;
+        //Initialize device
+        retValue = scannerDevice.Init();
+        if(retValue == 0) {
+            System.out.println("Device initialized successfully ");
+        }else {
+            JOptionPane.showMessageDialog(rootPane, scannerDevice.GetLastError());
+            System.out.println("Device initialization error " + scannerDevice.GetLastError() + "RetValue " + retValue);
+            return;
+        }
+        
          welcomePanel.setVisible(false);
          searchPanel.setVisible(true);
     }//GEN-LAST:event_searchButtonActionPerformed
