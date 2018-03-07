@@ -215,6 +215,7 @@ public class repositoryHandler {
         for(int i = 0; i < templateList.size(); i ++) {
             rd = (repoData) templateList.get(i);
             int score = devLib.MatchISO(isoTemplate, rd.getIsoTemplate());
+            System.out.println("ISO Match Score :" + String.valueOf(i) + ":: " + String.valueOf(score));
             if(score > 14000){
               return getInfoPerson(rd.getFileLocation());
             }
@@ -228,7 +229,7 @@ public class repositoryHandler {
         for(int i = 0; i < templateList.size(); i ++) {
             rd = (repoData) templateList.get(i);
             int score = devLib.MatchANSI(ansiTemplate, rd.getAnsiTemplate());
-            System.out.println("Match Score :" + String.valueOf(i) + ":: " + String.valueOf(score));
+            System.out.println("Ansi Match Score :" + String.valueOf(i) + ":: " + String.valueOf(score));
              if(score > 14000){
               return getInfoPerson(rd.getFileLocation());
             }

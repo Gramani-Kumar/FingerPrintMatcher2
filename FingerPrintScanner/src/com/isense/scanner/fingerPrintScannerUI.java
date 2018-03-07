@@ -512,8 +512,18 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Scanning Error : " + scannerDevice.GetLastError());
             return;
         }
-        
+
         infoPerson iPerson = null; 
+        iPerson = repoHandler.checkIsoTemplate(scannerDevice, fingerData.ISOTemplate());
+        
+        if(iPerson != null) {
+            System.out.println("The Person name :" + iPerson.getName());
+        }else {
+            System.out.println("No Record found ");
+            JOptionPane.showMessageDialog(rootPane, "No Record Found !");
+            return;
+        }
+        
         iPerson = repoHandler.checkAnsiTemplate(scannerDevice, fingerData.ANSITemplate());
         
         if(iPerson != null) {
