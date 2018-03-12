@@ -24,6 +24,9 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
     private repositoryHandler   repoHandler;
     private FingerData          scannedFingerData;
     private configHandler       appConfigHandler;
+    private scanFingerImage     fingerImage1;
+    private scanFingerImage     fingerImage2;
+    
     /**
      * Creates new form FingerPrintScanner
      * @throws java.lang.Exception
@@ -65,6 +68,10 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
             //Ignore.
             System.out.println("Exception in Create ConfigHandler");
         }
+        
+        fingerImage1 = null;
+        fingerImage2 = null;
+                
     }
 
     /**
@@ -382,6 +389,11 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
 
         //Show Register Panel.    
         registrarPanel.setVisible(true);
+        
+        if(fingerImage1 == null) {
+            fingerImage1 = new scanFingerImage(scannedImageLabel.getHeight(), scannedImageLabel.getWidth());
+        }
+        fingerImage1.setImage(null);
     
     }//GEN-LAST:event_regButtonActionPerformed
 
@@ -401,13 +413,17 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
             return;
         }
         
-        //TODO:
+        fingerImage1.setImage(null);
+        scannedImageLabel.setIcon(fingerImage1);
+        scannedImageLabel.repaint();
+
+        
         //Try for 4 time for best Quality and Nfiq  
         //The best Quality > 65 and Nfiq 1,2,3.
-
         int max_iteration = 4;
         int expectScore   = 65;
-        int timeout       = 2500;
+        int timeout       = 2100;
+        
         do {
 
             scannedFingerData = new FingerData();
@@ -422,6 +438,15 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
             System.out.println("The Nfig    Level : " + String.valueOf(scannedFingerData.Nfiq()));
             
             if(scannedFingerData.Quality() > expectScore){
+                
+                        //Set Image.
+                fingerImage1.setImage(scannerDevice.BytesToBitmap(scannedFingerData.FingerImage()));
+                scannedImageLabel.setIcon(fingerImage1);
+                //scannedImageLabel.setText("-- SCANNED --");
+                //scannedImageLabel.setOpaque(Boolean.TRUE);
+                scannedImageLabel.repaint();
+                
+                
                 JOptionPane.showMessageDialog(rootPane, "Thanks.. Scan got good score");
                 break;
             } 
@@ -433,8 +458,6 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
             max_iteration --;
             expectScore -= 2;
             timeout += 100;
-            
-            //TODO: NFiq ??.
 
         }while(max_iteration > 0);
         
