@@ -211,15 +211,28 @@ public class repositoryHandler {
     }
     
     public infoPerson checkIsoTemplate(MFS100 devLib, byte[] isoTemplate){
+
+        long startTime;
+        long endTime;
         
         repoData rd;
 
+        startTime = System.nanoTime();
+        
         for(int i = 0; i < templateList.size(); i ++) {
             rd = (repoData) templateList.get(i);
             int score = devLib.MatchISO(isoTemplate, rd.getIsoTemplate());
-            System.out.println("ISO Match Score :" + String.valueOf(i) + ":: " + String.valueOf(score));
             if(score > 14000){
-              return getInfoPerson(rd.getFileLocation());
+                
+                endTime = System.nanoTime();
+
+                System.out.println("******** Search Result in ISO **********");
+                System.out.println("Elapsed Time in Search " + String.valueOf((endTime - startTime) / 1000 ) + "us" );
+                System.out.println("Total Record Searched  " + String.valueOf(i + 1) );
+                System.out.println("Total Record in System " + String.valueOf(templateList.size() + 1) );
+                System.out.println("*****************************************");
+                
+                return getInfoPerson(rd.getFileLocation());
             }
         }
         return null;

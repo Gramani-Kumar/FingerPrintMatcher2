@@ -559,15 +559,15 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
             return;
         }
         
-        iPerson = repoHandler.checkAnsiTemplate(scannerDevice, scannedFingerData.ANSITemplate());
-        
-        if(iPerson != null) {
-            System.out.println("The Person name :" + iPerson.getName());
-        }else {
-            System.out.println("No Record found ");
-            JOptionPane.showMessageDialog(rootPane, "No Record Found !");
-            return;
-        }
+//        iPerson = repoHandler.checkAnsiTemplate(scannerDevice, scannedFingerData.ANSITemplate());
+//        
+//        if(iPerson != null) {
+//            System.out.println("The Person name :" + iPerson.getName());
+//        }else {
+//            System.out.println("No Record found ");
+//            JOptionPane.showMessageDialog(rootPane, "No Record Found !");
+//            return;
+//        }
 
         System.out.println("Name  : " + iPerson.getName() + "" + iPerson.getFingerNumber() +" " + iPerson.getSex());
         
@@ -578,7 +578,7 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
 
     private void displayUserInfo(infoPerson iPerson) {
         
-        System.out.println("iPerson Object " + iPerson );
+        //System.out.println("iPerson Object " + iPerson );
         System.out.println("Name  : " + iPerson.getName() + "" + iPerson.getFingerNumber() +" " + iPerson.getSex());
         
         infoOutName.setText(iPerson.getName());
