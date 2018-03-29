@@ -101,6 +101,7 @@ public class repositoryHandler {
         //write to file
         try {
             FileOutputStream os = new FileOutputStream(fileName);
+            //FileWriter
             JsonWriter jsonWriter = Json.createWriter(os);
             jsonWriter.writeObject(person);
             jsonWriter.close();
@@ -203,6 +204,7 @@ public class repositoryHandler {
             return iPerson;
         }
         catch(Exception e) {
+            System.out.println("Exception " + e.getStackTrace());
             
         }
         return iPerson;

@@ -397,26 +397,11 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
     
     }//GEN-LAST:event_regButtonActionPerformed
 
-    private void scanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanButtonActionPerformed
+    
+    private FingerData capture() {
         
-        FingerData  fData;
-        int         fQuality = 60;  //Quality 
-        int         fTimeOut = 1500 ; //Milliseconds
         boolean     fShowPreview = false;
         int         fRetValue = 0;
-        
-        if(scannerDevice.IsConnected()) {
-            System.out.println("The Device is connected");
-        }else {
-            JOptionPane.showMessageDialog(rootPane, "Device Not Connected");
-            System.out.println("The Device is NOT connected");
-            return;
-        }
-        
-        fingerImage1.setImage(null);
-        scannedImageLabel.setIcon(fingerImage1);
-        scannedImageLabel.repaint();
-
         
         //Try for 4 time for best Quality and Nfiq  
         //The best Quality > 65 and Nfiq 1,2,3.
@@ -439,19 +424,11 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
             
             if(scannedFingerData.Quality() > expectScore){
                 
-                        //Set Image.
-                fingerImage1.setImage(scannerDevice.BytesToBitmap(scannedFingerData.FingerImage()));
-                scannedImageLabel.setIcon(fingerImage1);
-                //scannedImageLabel.setText("-- SCANNED --");
-                //scannedImageLabel.setOpaque(Boolean.TRUE);
-                scannedImageLabel.repaint();
-                
-                
                 JOptionPane.showMessageDialog(rootPane, "Thanks.. Scan got good score");
                 break;
             } 
             else {
-                //if
+
                 JOptionPane.showMessageDialog(rootPane, "Try-again: after cleaning the scanner surface !!");
                 System.out.println("Devie error :" + scannerDevice.GetLastError());
             }
@@ -464,8 +441,40 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
         if(fRetValue != 0) {
              JOptionPane.showMessageDialog(rootPane, "Scanning Process Failed");
              System.out.println("Devie error :" + scannerDevice.GetLastError());
-             return;
+             return null;
         }
+        
+        return scannedFingerData;
+
+    }
+    
+    
+    
+    private void scanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanButtonActionPerformed
+        
+        if(scannerDevice.IsConnected()) {
+            System.out.println("The Device is connected");
+        }else {
+            JOptionPane.showMessageDialog(rootPane, "Device Not Connected");
+            System.out.println("The Device is NOT connected");
+            return;
+        }
+
+        fingerImage1.setImage(null);
+        scannedImageLabel.setIcon(fingerImage1);
+        scannedImageLabel.repaint();
+        
+        //Scanning.
+        if(capture() == null) {
+            return;
+        }
+        
+        //Set Image.
+        fingerImage1.setImage(scannerDevice.BytesToBitmap(scannedFingerData.FingerImage()));
+        scannedImageLabel.setIcon(fingerImage1);
+        scannedImageLabel.setText("-- SCANNED --");
+        scannedImageLabel.setOpaque(Boolean.TRUE);
+        scannedImageLabel.repaint();
         
         //Show Register Panel.    
         registrarPanel.setVisible(false);
@@ -497,8 +506,14 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
             return;
         }
         
-         welcomePanel.setVisible(false);
-         searchPanel.setVisible(true);
+        welcomePanel.setVisible(false);
+        searchPanel.setVisible(true);
+        
+        if(fingerImage2 == null) {
+            fingerImage2 = new scanFingerImage(scannedImageLabel1.getHeight(), scannedImageLabel1.getWidth());
+        }
+        fingerImage2.setImage(null);
+
     }//GEN-LAST:event_searchButtonActionPerformed
 
     private void ansiFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ansiFileButtonActionPerformed
@@ -512,12 +527,7 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
     }//GEN-LAST:event_backSearchButtonActionPerformed
 
     private void scanButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanButton2ActionPerformed
-            
-        FingerData fingerData = new FingerData();
-        int fRetValue  = 0;
-        int expectScore = 60;
-        int timeOut = 2500;
-        
+    
         if(scannerDevice.IsConnected()) {
             System.out.println("The Device is connected");
         }else {
@@ -526,18 +536,20 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
             return;
         }
         
-        fRetValue = scannerDevice.AutoCapture(fingerData, expectScore, timeOut, false);
-
-        System.out.println("The Quality Level : " + String.valueOf(fingerData.Quality()));
-        System.out.println("The Nfig    Level : " + String.valueOf(fingerData.Nfiq()));
-
-        if(fRetValue != 0) {
-            JOptionPane.showMessageDialog(rootPane, "Scanning Error : " + scannerDevice.GetLastError());
+        //Scanning.
+        if(capture() == null) {
             return;
         }
 
+        //Set Image.
+        fingerImage2.setImage(scannerDevice.BytesToBitmap(scannedFingerData.FingerImage()));
+        scannedImageLabel1.setIcon(fingerImage2);
+        scannedImageLabel1.setText("-- SCANNED --");
+        scannedImageLabel1.setOpaque(Boolean.TRUE);
+        scannedImageLabel1.repaint();
+
         infoPerson iPerson = null; 
-        iPerson = repoHandler.checkIsoTemplate(scannerDevice, fingerData.ISOTemplate());
+        iPerson = repoHandler.checkIsoTemplate(scannerDevice, scannedFingerData.ISOTemplate());
         
         if(iPerson != null) {
             System.out.println("The Person name :" + iPerson.getName());
@@ -547,7 +559,7 @@ public class fingerPrintScannerUI extends javax.swing.JFrame {
             return;
         }
         
-        iPerson = repoHandler.checkAnsiTemplate(scannerDevice, fingerData.ANSITemplate());
+        iPerson = repoHandler.checkAnsiTemplate(scannerDevice, scannedFingerData.ANSITemplate());
         
         if(iPerson != null) {
             System.out.println("The Person name :" + iPerson.getName());
