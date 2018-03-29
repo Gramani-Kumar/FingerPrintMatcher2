@@ -235,7 +235,7 @@ public class repositoryHandler {
                 return getInfoPerson(rd.getFileLocation());
             }
         }
-        return null;
+        return null;    
     }
     
     public infoPerson checkAnsiTemplate(MFS100 devLib, byte[] ansiTemplate){
